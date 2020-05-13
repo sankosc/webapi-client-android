@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WebApiClientSample</string>
+    <string name="label_button">Button</string>
+</resources>

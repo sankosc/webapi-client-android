@@ -1,0 +1,3 @@
+rootProject.name='WebApiClientSample'
+include ':app'
+include ':webapiclient'
