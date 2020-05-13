@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -38,4 +39,14 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:4.6.0"
     implementation "org.conscrypt:conscrypt-android:2.4.0"
+}
+
+publish {
+    userOrg = 'sankosc'
+    groupId = 'jp.co.sankosc'
+    artifactId = 'webapi-client'
+    publishVersion = '1.0.0'
+    desc = 'This is a Web API client library for android.'
+    website = 'https://github.com/sankosc/webapi-client-android'
+    repoName = 'webapi-client'
 }
