@@ -41,7 +41,7 @@ class WebApiClient(
     val handleAuthFail: (() -> Unit)? = null,
 
     // Refresh Token Handler
-    val handleTokenRefresh: ((WebApiClient, (String) -> Unit) -> Unit)? = null,
+    val handleTokenExpired: ((WebApiClient, (String) -> Unit) -> Unit)? = null,
 
     // Handler
     val handler: Handler? = Handler(Looper.getMainLooper())) {
@@ -84,7 +84,7 @@ class WebApiClient(
                     response.body?.close()
                     val data = Json(jsonConfiguration).parse(loader, json)
                     invoke { handleSuccess(data) }
-                } else if (response.code == 401 && isRecursive == false && handleTokenRefresh != null) {
+                } else if (response.code == 401 && isRecursive == false && handleTokenExpired != null) {
                     refresh { get(url, loader, handleSuccess, handleError, retryCount, true) }
                 } else if (response.code == 401 && handleAuthFail != null) {
                     handleAuthFail.invoke()
@@ -132,7 +132,7 @@ class WebApiClient(
                     response.body?.close()
                     val data = Json(jsonConfiguration).parse(resLoader, json)
                     invoke { handleSuccess(data) }
-                } else if (response.code == 401 && isRecursive == false && handleTokenRefresh != null) {
+                } else if (response.code == 401 && isRecursive == false && handleTokenExpired != null) {
                     refresh { post(url, postData, reqLoader, resLoader, handleSuccess, handleError, retryCount, true) }
                 } else if (response.code == 401 && handleAuthFail != null) {
                     handleAuthFail.invoke()
@@ -153,7 +153,7 @@ class WebApiClient(
      * Refresh Access Token
      */
     private fun refresh(handleRefreshed: () -> Unit) {
-        handleTokenRefresh?.invoke(this, {
+        handleTokenExpired?.invoke(this, {
             accessToken = it
             handleRefreshed()
         })

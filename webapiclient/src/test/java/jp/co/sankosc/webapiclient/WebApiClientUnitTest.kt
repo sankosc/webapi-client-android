@@ -55,7 +55,7 @@ class WebApiClientUnitTest {
     fun login_isFail() {
         val url = baseUrl + "login"
         var result = false
-        val client = WebApiClient(handler = null, handleTokenRefresh = null, handleAuthFail = {
+        val client = WebApiClient(handler = null, handleTokenExpired = null, handleAuthFail = {
             result = true
         })
         val data = Login("sample@sankosc.co.jp", "sample789")
@@ -188,7 +188,7 @@ class WebApiClientUnitTest {
         val url = baseUrl + "me"
         val client = WebApiClient(
             accessToken = accessToken,
-            handleTokenRefresh = refreshHandller,
+            handleTokenExpired = refreshHandller,
             handleAuthFail = {
                 print("refresh token is expired")
             },
@@ -225,7 +225,7 @@ class WebApiClientUnitTest {
         val url = baseUrl + "echo"
         val client = WebApiClient(
             accessToken = accessToken,
-            handleTokenRefresh = refreshHandller,
+            handleTokenExpired = refreshHandller,
             handleAuthFail = {
                 print("refresh token is expired")
             },
