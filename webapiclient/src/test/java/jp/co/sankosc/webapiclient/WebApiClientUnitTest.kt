@@ -375,4 +375,31 @@ class WebApiClientUnitTest {
         }
         Assert.fail()
     }
+
+    @Test
+    fun logout_isSccess() {
+        val url = baseUrl + "logout"
+        var result = false
+        val client = WebApiClient(handler = null, accessToken = accessToken)
+        client.post<Empty, Message>(url, Empty(), {
+            WebApiClient(handler = null, accessToken = accessToken, handleAuthFail = {
+                result = true
+            }).get<Me>(baseUrl + "me", {
+                Assert.fail()
+                result = true
+            }, {
+                Assert.fail()
+                result = true
+            })
+        }, {
+            Assert.fail()
+            it.printStackTrace()
+            result = true
+        })
+        for (i in 1..100) {
+            if (result) return
+            Thread.sleep(100)
+        }
+        Assert.fail()
+    }
 }

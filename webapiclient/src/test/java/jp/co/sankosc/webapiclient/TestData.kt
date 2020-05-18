@@ -18,6 +18,9 @@ data class BingImage(
 )
 
 @Serializable
+class Empty()
+
+@Serializable
 data class Message(
     val message: String?
 )
