@@ -30,7 +30,7 @@ class WebApiClientExceptionUnitTest {
         } catch (e: Exception) {
             if (e is WebApiClientException) {
                 Assert.assertEquals(200, e.code)
-                Assert.assertEquals("test exception", e.message)
+                Assert.assertEquals("200;test exception", e.message)
             } else {
                 Assert.fail()
             }

@@ -21,5 +21,5 @@ import java.lang.Exception
 /**
  * @author nozaki
  */
-class WebApiClientException(val code: Int, message: String) : Exception(message) {
+class WebApiClientException(val code: Int, message: String) : Exception(code.toString() + ";" + message) {
 }
