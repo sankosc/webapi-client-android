@@ -93,6 +93,27 @@ class WebApiClientUnitTest {
     }
 
     @Test
+    fun postNoAuth_isSuccess() {
+        val url = baseUrl + "echo"
+        val client = WebApiClient(handler = null)
+        var result = false
+        val data = Message("This is test message.")
+        client.post<Message, Message>(url, data, {
+            Assert.assertEquals("This is test message.", it.message)
+            result = true
+        }, {
+            it.printStackTrace()
+            Assert.fail()
+            result = true
+        })
+        for (i in 1..100) {
+            if (result) return
+            Thread.sleep(100)
+        }
+        Assert.fail()
+    }
+
+    @Test
     fun getWithAUth_isSuccess() {
         val url = baseUrl + "me"
         val client = WebApiClient(accessToken = accessToken, handler = null)
@@ -112,12 +133,12 @@ class WebApiClientUnitTest {
 
     @Test
     fun postWithAuth_isSuccess() {
-        val url = baseUrl + "echo"
+        val url = baseUrl + "reverse"
         val client = WebApiClient(accessToken = accessToken, handler = null)
         var result = false
         val data = Message("This is test message.")
         client.post<Message, Message>(url, data, {
-            Assert.assertEquals("This is test message.", it.message)
+            Assert.assertEquals(".egassem tset si sihT", it.message)
             result = true
         }, {
             it.printStackTrace()
@@ -292,7 +313,7 @@ class WebApiClientUnitTest {
 
     @Test
     fun postWithAuth_isFail() {
-        val url = baseUrl + "echo"
+        val url = baseUrl + "reverse"
         var result = false
         val client = WebApiClient(handler = null, handleAuthFail = {
             result = true
@@ -314,7 +335,7 @@ class WebApiClientUnitTest {
 
     @Test
     fun postWithAuth_isFail2() {
-        val url = baseUrl + "echo"
+        val url = baseUrl + "reverse"
         var result = false
         val client = WebApiClient(accessToken = accessToken + "XX", handler = null, handleAuthFail = {
             result = true
