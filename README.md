@@ -23,8 +23,15 @@ apply plugin: 'kotlinx-serialization'
 
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
-    implementation 'jp.co.sankosc:webapi-client:1.0.1'
+    implementation 'jp.co.sankosc:webapi-client:1.0.2'
 }
+```
+
+## Parmission
+Add a permission to AndroidManifest.xml
+
+```xml:AndroidManifest.xml
+    <uses-permission android:name="android.permission.INTERNET" />
 ```
 
 ## Json data
@@ -52,13 +59,14 @@ data class Token(
 ```
 
 ## Get
+Specify the response type. And pass the url, success handler and error handler.
 
 ```kotlin:Example
 val url = "https://develop.sankosc.co.jp/apitest/api/hello"
 val client = WebApiClient()
 client.get<Message>(url, {
     // Success
-    print(it.message)
+    println(it.message)
 }, {
     // Error
     it.printStackTrace()
@@ -66,13 +74,14 @@ client.get<Message>(url, {
 ```
 
 ## Post
+Specify the request and response type. And pass the url, post-data, success handler and error handler.
 
 ```kotlin:Example
 val url = "https://develop.sankosc.co.jp/apitest/api/echo"
 val client = WebApiClient()
 client.post<Message, Message>(url, Message("post data"), {
     // Success
-    print(it.message)
+    println(it.message)
 }, {
     // Error
     it.printStackTrace()
@@ -90,7 +99,7 @@ client.get<Message>(url, {
 }, {
     // Error
     if (it is WebApiClientException) {
-        print(it.code)
+        println(it.code)
     }
 })
 ```
@@ -135,6 +144,7 @@ When you call onRefreshed, this library will access to last called API with new 
 ```kotlin:Example
 val client = WebApiClient(handleTokenExpired= {client, onRefreshed ->
     // Refresh token
+    val url = "https://develop.sankosc.co.jp/apitest/api/refresh"
     client.refresh<Token>(url, {
         onRefreshed(it.accessToken)
     }, {
