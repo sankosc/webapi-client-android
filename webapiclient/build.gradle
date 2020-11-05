@@ -2,6 +2,8 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
+    id 'com.jfrog.bintray'
+    id 'maven-publish'
 }
 
 android {
@@ -44,4 +46,41 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+}
+
+def libraryGroupId = 'jp.co.sankosc'
+def libraryArtifactId = 'webapi-client'
+def libraryVersion = '1.1.0'
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = libraryGroupId
+                artifactId = libraryArtifactId
+                version = libraryVersion
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.property('bintray.user')
+    key = project.property('bintray.token')
+    publications = ['release']
+    publish = true
+    override = true
+    pkg {
+        repo = 'webapi-client'
+        name = libraryArtifactId
+        desc = 'This is a Web API client library for android.'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/sankosc/webapi-client-android'
+        publicDownloadNumbers = true
+        version {
+            name = libraryVersion
+            released = new Date()
+        }
+    }
 }
