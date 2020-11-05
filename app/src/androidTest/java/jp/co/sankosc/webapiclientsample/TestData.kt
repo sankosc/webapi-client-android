@@ -1,6 +1,11 @@
 package jp.co.sankosc.webapiclientsample
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,7 +51,7 @@ object DateSerializer: KSerializer<Date> {
     private val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.'000000Z'")
 
     override val descriptor: SerialDescriptor
-            = PrimitiveDescriptor("WithCustomDefault", PrimitiveKind.STRING)
+            = PrimitiveSerialDescriptor("WithCustomDefault", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, obj: Date) {
         encoder.encodeString(df.format(obj))
