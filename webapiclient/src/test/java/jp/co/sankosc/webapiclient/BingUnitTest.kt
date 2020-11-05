@@ -1,5 +1,5 @@
 /*
- * Create: 2020/05/11
+ * Create: 2020/11/05
  * Copyright 2020 Sanko System Co.,Ltd.
  */
 
@@ -11,7 +11,7 @@ import org.junit.Test
 /**
  * @author nozaki
  */
-class BintUnitTest {
+class BingUnitTest {
     @Test
     fun getBing_isSuccess() {
         val url = "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&setmkt=ja-jp"
