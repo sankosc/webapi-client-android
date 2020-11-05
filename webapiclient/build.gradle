@@ -74,6 +74,7 @@ bintray {
     pkg {
         repo = 'webapi-client'
         name = libraryArtifactId
+        userOrg = 'sankosc'
         desc = 'This is a Web API client library for android.'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/sankosc/webapi-client-android'
