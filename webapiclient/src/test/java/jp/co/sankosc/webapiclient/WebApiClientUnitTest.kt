@@ -1,5 +1,5 @@
 /*
- * Create: 2020/05/06
+ * Create: 2020/11/05
  * Copyright 2020 Sanko System Co.,Ltd. (SankoSC)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package jp.co.sankosc.webapiclient
 
 import org.junit.Assert

@@ -12,18 +12,14 @@ This library use [Kotolinx Json](https://github.com/Kotlin/kotlinx.serialization
 
 Edit bundle.gradle(Project) and gradle:bundle.gradle(app).
 
-```gradle:bundle.gradle(Project)
-dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-}
-```
-
 ```gradle:bundle.gradle(app)
-apply plugin: 'kotlinx-serialization'
+plugins {
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
+}
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
-    implementation 'jp.co.sankosc:webapi-client:1.0.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation 'jp.co.sankosc:webapi-client:1.1.0'
 }
 ```
 
@@ -186,11 +182,11 @@ client.accessToken = ""
 
 client.tokenType = "Bearer"
 
-client.jsonConfiguration = JsonConfiguration(
-	isLenient = true,
-	ignoreUnknownKeys = true,
-	serializeSpecialFloatingPointValues = true
-)
+client.jsonConfiguration = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+        allowSpecialFloatingPointValues = true
+}
 ```
 
 |Name|Description|Initial Value|

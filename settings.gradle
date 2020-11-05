@@ -1,3 +1,3 @@
-rootProject.name='WebApiClientSample'
+include ':WebApiClient'
 include ':app'
-include ':webapiclient'
+rootProject.name = "WebApiClientSample"

@@ -1,5 +1,5 @@
 /*
- * Create: 2020/05/06
+ * Create: 2020/11/05
  * Copyright 2020 Sanko System Co.,Ltd. (SankoSC)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package jp.co.sankosc.webapiclient
 
 import android.os.Handler
 import android.os.Looper
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.serializer
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -53,11 +50,11 @@ class WebApiClient(
     val builder = OkHttpClient.Builder()
 
     // Json Configuration
-    var jsonConfiguration = JsonConfiguration(
-        isLenient = true,
-        ignoreUnknownKeys = true,
-        serializeSpecialFloatingPointValues = true
-    )
+    var jsonConfiguration = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+        allowSpecialFloatingPointValues = true
+    }
 
     /**
      * GET API
@@ -82,7 +79,7 @@ class WebApiClient(
                 if (response.isSuccessful) {
                     val json = response.body?.string() ?: ""
                     response.body?.close()
-                    val data = Json(jsonConfiguration).parse(loader, json)
+                    val data =jsonConfiguration.decodeFromString(loader, json)
                     invoke { handleSuccess(data) }
                 } else if (response.code == 401 && isRecursive == false && handleTokenExpired != null) {
                     refresh { get(url, loader, handleSuccess, handleError, retryCount, true) }
@@ -121,7 +118,7 @@ class WebApiClient(
                     request.header("Authorization", tokenType + " " + accessToken)
                 }
                 val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
-                val body = Json.stringify(reqLoader, postData).toRequestBody(mediaType)
+                val body = jsonConfiguration.encodeToString(reqLoader, postData).toRequestBody(mediaType)
                 request.post(body)
 
                 val client = builder.build()
@@ -130,7 +127,7 @@ class WebApiClient(
                 if (response.isSuccessful) {
                     val json = response.body?.string() ?: ""
                     response.body?.close()
-                    val data = Json(jsonConfiguration).parse(resLoader, json)
+                    val data = jsonConfiguration.decodeFromString(resLoader, json)
                     invoke { handleSuccess(data) }
                 } else if (response.code == 401 && isRecursive == false && handleTokenExpired != null) {
                     refresh { post(url, postData, reqLoader, resLoader, handleSuccess, handleError, retryCount, true) }
@@ -169,7 +166,7 @@ class WebApiClient(
     /**
      * alias GET API
      */
-    @OptIn(ImplicitReflectionSerializer::class)
+    @OptIn(kotlinx.serialization.InternalSerializationApi::class)
     inline fun <reified T : Any> get(
         url: String,
         noinline handleSuccess: (T) -> Unit,
@@ -180,7 +177,7 @@ class WebApiClient(
     /**
      * alias POST API
      */
-    @OptIn(ImplicitReflectionSerializer::class)
+    @OptIn(kotlinx.serialization.InternalSerializationApi::class)
     inline fun <reified Treq : Any, reified Tres : Any> post(
         url: String,
         postData: Treq,
@@ -192,7 +189,7 @@ class WebApiClient(
     /**
      * alias Refresh API
      */
-    @OptIn(ImplicitReflectionSerializer::class)
+    @OptIn(kotlinx.serialization.InternalSerializationApi::class)
     inline fun <reified T : Any> refresh(
         url: String,
         noinline handleSuccess: (T) -> Unit,
@@ -203,7 +200,7 @@ class WebApiClient(
     /**
      * alias Refresh API
      */
-    @OptIn(ImplicitReflectionSerializer::class)
+    @OptIn(kotlinx.serialization.InternalSerializationApi::class)
     inline fun <reified Treq : Any, reified Tres : Any> refresh(
         url: String,
         postData: Treq,
